@@ -7,6 +7,7 @@ resource "azurerm_firewall" "fw" {
   sku_name            = each.value.sku_name
   sku_tier            = each.value.sku_tier
   firewall_policy_id  = each.value.firewall_policy_id
+  dns_servers         = each.value.firewall_policy_id != null ? each.value.dns_servers : null
   tags                = try(each.value.tags, {})
 
   virtual_hub {
