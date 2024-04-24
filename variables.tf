@@ -208,11 +208,17 @@ variable "type" {
 
 variable "virtual_hubs" {
   type = map(object({
-    name           = string
-    location       = string
-    resource_group = optional(string, null)
-    address_prefix = string
-    tags           = optional(map(string))
+    name                   = string
+    location               = string
+    resource_group         = optional(string, null)
+    address_prefix         = string
+    hub_routing_preference = optional(string, null)
+    tags                   = optional(map(string))
+    routes = optional(map(object({
+      address_prefix      = string
+      next_hop_ip_address = string
+    })))
+    sku = optional(string, null)
   }))
   default     = {}
   description = "Virtual Hub parameters"
