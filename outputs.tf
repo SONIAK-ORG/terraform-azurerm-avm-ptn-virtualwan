@@ -46,24 +46,30 @@ output "virtual_wan" {
 
 output "firewalls" {
   description = "Firewall Objects"
-  #value       = var.firewalls != null ? [for firewall in azurerm_firewall.fw : firewall] : null
-
   value = {
-    for firewall in var.firewalls :
+    for firewall in azurerm_firewall.fw :
     firewall.name => {
       id = firewall.id
       firewall = firewall
-      # ip_configuration = firewall.ip_configuration
-      # public_ip = firewall.public_ip
+    }
+  }
+}
+
+output "er_gateways" {
+  description = "ExpressRoute Gateway Resource Objects"
+  value = {
+    for gw in azurerm_express_route_gateway.express_route_gateway :
+    gw.name => {
+      id = gw.id
+      gw = gw
     }
   }
 }
 
 output "virtual_hubs" {
   description = "Virtual Hub Resource Objects"
-  #value       = var.virtual_hubs != null ? [for hub in azurerm_virtual_hub.virtual_hub : hub] : null
   value = {
-    for hub in var.virtual_hubs :
+    for hub in azurerm_virtual_hub.virtual_hub :
     hub.name => {
       id = hub.id
       hub = hub
@@ -73,9 +79,8 @@ output "virtual_hubs" {
 
 output "p2s_vpn_gws" {
   description = "P2S VPN Gateway Resource Objects"
-  # value       = var.p2s_gateways != null ? [for gw in azurerm_vpn_gateway.vpn_gateway : gw] : null
   value = {
-    for gw in var.p2s_gateways :
+    for gw in azurerm_point_to_site_vpn_gateway.p2s_gateway :
     gw.name => {
       id = gw.id
       gw = gw
@@ -86,7 +91,7 @@ output "p2s_vpn_gws" {
 output "s2s_vpn_gws" {
   description = "S2S VPN Gateway Resource Objects"
   value = {
-    for gw in var.vpn_gateways :
+    for gw in azurerm_vpn_gateway.vpn_gateway :
     gw.name => {
       id = gw.id
       gw = gw
