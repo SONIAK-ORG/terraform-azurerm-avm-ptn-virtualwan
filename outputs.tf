@@ -37,3 +37,24 @@ output "virtual_wan_id" {
   description = "Virtual WAN ID"
   value       = azurerm_virtual_wan.virtual_wan != null ? azurerm_virtual_wan.virtual_wan.id : null
 }
+
+# New code to fix inconsistencies
+output "firewall" {
+  description = "Firewall Objects"
+  value       = var.firewalls != null ? [for firewall in azurerm_firewall.fw : firewall] : null
+}
+
+output "virtual_hub" {
+  description = "Virtual Hub Resource Objects"
+  value       = var.virtual_hubs != null ? [for hub in azurerm_virtual_hub.virtual_hub : hub] : null
+}
+
+output "virtual_wan" {
+  description = "Virtual WAN"
+  value       = azurerm_virtual_wan.virtual_wan != null ? azurerm_virtual_wan.virtual_wan : null
+}
+
+output "p2s_vpn_gw" {
+  description = "P2S VPN Gateway Resource Objects"
+  value       = var.p2s_gateways != null ? [for gw in azurerm_vpn_gateway.vpn_gateway : gw] : null
+}
