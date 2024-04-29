@@ -39,22 +39,57 @@ output "virtual_wan_id" {
 }
 
 # New code to fix inconsistencies
-output "firewall" {
-  description = "Firewall Objects"
-  value       = var.firewalls != null ? [for firewall in azurerm_firewall.fw : firewall] : null
-}
-
-output "virtual_hub" {
-  description = "Virtual Hub Resource Objects"
-  value       = var.virtual_hubs != null ? [for hub in azurerm_virtual_hub.virtual_hub : hub] : null
-}
-
 output "virtual_wan" {
   description = "Virtual WAN"
   value       = azurerm_virtual_wan.virtual_wan != null ? azurerm_virtual_wan.virtual_wan : null
 }
 
-output "p2s_vpn_gw" {
+output "firewalls" {
+  description = "Firewall Objects"
+  #value       = var.firewalls != null ? [for firewall in azurerm_firewall.fw : firewall] : null
+
+  value = {
+    for firewall in var.firewalls :
+    firewall.name => {
+      id = firewall.id
+      firewall = firewall
+      # ip_configuration = firewall.ip_configuration
+      # public_ip = firewall.public_ip
+    }
+  }
+}
+
+output "virtual_hubs" {
+  description = "Virtual Hub Resource Objects"
+  #value       = var.virtual_hubs != null ? [for hub in azurerm_virtual_hub.virtual_hub : hub] : null
+  value = {
+    for hub in var.virtual_hubs :
+    hub.name => {
+      id = hub.id
+      hub = hub
+    }
+  }
+}
+
+output "p2s_vpn_gws" {
   description = "P2S VPN Gateway Resource Objects"
-  value       = var.p2s_gateways != null ? [for gw in azurerm_vpn_gateway.vpn_gateway : gw] : null
+  # value       = var.p2s_gateways != null ? [for gw in azurerm_vpn_gateway.vpn_gateway : gw] : null
+  value = {
+    for gw in var.p2s_gateways :
+    gw.name => {
+      id = gw.id
+      gw = gw
+    }
+  }
+}
+
+output "s2s_vpn_gws" {
+  description = "S2S VPN Gateway Resource Objects"
+  value = {
+    for gw in var.vpn_gateways :
+    gw.name => {
+      id = gw.id
+      gw = gw
+    }
+  }
 }
